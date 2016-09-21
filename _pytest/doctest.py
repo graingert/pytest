@@ -7,6 +7,57 @@ import pytest
 from _pytest._code.code import ExceptionInfo, ReprFileLocation, TerminalRepr
 from _pytest.fixtures import FixtureRequest
 
+from thread import start_new_thread
+from Queue import Queue
+
+def iteratorize(thunk):
+    """ 
+    Transforms a function that takes a callback 
+    into a generator.
+    """
+    sentinel = object()
+    q = Queue(maxsize=1)
+
+    def callback(*args, **kwargs):
+      q.put((args, kwargs))
+      q.join()
+
+    def gentask():
+      thunk(callback)
+      q.put(sentinel)
+      q.join()
+
+    start_new_thread(gentask, ())
+
+    while True:
+        next_item = q.get(True,None)
+        if next_item is sentinel:
+            q.task_done()
+            break
+        yield next_item
+        q.task_done()
+
+
+SUCCESS, FAILURE, BOOM = range(3)
+class CallbackRunner(doctest.DoctestRunner):
+    def set_cb(self, cb):
+        self.__callback = cb
+
+    def run(self, *args, **kwargs):
+
+    def report_success(self, *args, **kwargs):
+        super(CallbackRunner, self).report_success(*args, **kwargs)
+        self.__callback(SUCCESS, *args, **kwargs)
+
+    def report_failure(self, *args, **kwargs):
+        super(CallbackRunner, self).report_failure(*args, **kwargs)
+        self.__callback(FAILURE, *args, **kwargs)
+
+    def report_unexpected_outcome(self, *args, **kwargs):
+        super(CallbackRunner, self).report_unexpected_outcome(*args, **kwargs)
+        self.__callback(BOOM, *args, **kwargs)
+
+
 
 DOCTEST_REPORT_CHOICE_NONE = 'none'
 DOCTEST_REPORT_CHOICE_CDIFF = 'cdiff'

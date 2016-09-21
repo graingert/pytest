@@ -3150,3 +3150,10 @@ serve as a reference for developers.
   52001]
 * removed sorted() call for py.apigen tests in favour of [].sort() to support
   Python 2.3 [52481]
+
+>>> "1"
+'1'
+>>> "2"
+"2"
+>>> "3"
+'3'
