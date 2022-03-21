@@ -291,13 +291,15 @@ class HookRecorder:
 
     @overload
     def getreports(
-        self, names: "Literal['pytest_collectreport']",
+        self,
+        names: "Literal['pytest_collectreport']",
     ) -> Sequence[CollectReport]:
         ...
 
     @overload
     def getreports(
-        self, names: "Literal['pytest_runtest_logreport']",
+        self,
+        names: "Literal['pytest_runtest_logreport']",
     ) -> Sequence[TestReport]:
         ...
 
@@ -354,13 +356,15 @@ class HookRecorder:
 
     @overload
     def getfailures(
-        self, names: "Literal['pytest_collectreport']",
+        self,
+        names: "Literal['pytest_collectreport']",
     ) -> Sequence[CollectReport]:
         ...
 
     @overload
     def getfailures(
-        self, names: "Literal['pytest_runtest_logreport']",
+        self,
+        names: "Literal['pytest_runtest_logreport']",
     ) -> Sequence[TestReport]:
         ...
 
@@ -419,7 +423,10 @@ class HookRecorder:
 
         outcomes = self.listoutcomes()
         assertoutcome(
-            outcomes, passed=passed, skipped=skipped, failed=failed,
+            outcomes,
+            passed=passed,
+            skipped=skipped,
+            failed=failed,
         )
 
     def clear(self) -> None:
@@ -659,7 +666,7 @@ class Pytester:
         self._request = request
         self._mod_collections: WeakKeyDictionary[
             Collector, List[Union[Item, Collector]]
-        ] = (WeakKeyDictionary())
+        ] = WeakKeyDictionary()
         if request.function:
             name: str = request.function.__name__
         else:
@@ -1835,7 +1842,7 @@ class LineMatcher:
             Match lines consecutively?
         """
         if not isinstance(lines2, collections.abc.Sequence):
-            raise TypeError("invalid type for lines2: {}".format(type(lines2).__name__))
+            raise TypeError(f"invalid type for lines2: {type(lines2).__name__}")
         lines2 = self._getlines(lines2)
         lines1 = self.lines[:]
         extralines = []

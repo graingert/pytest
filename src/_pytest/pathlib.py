@@ -497,7 +497,7 @@ def import_path(
 
         if spec is None:
             raise ImportError(
-                "Can't find module {} at location {}".format(module_name, str(path))
+                f"Can't find module {module_name} at location {str(path)}"
             )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)  # type: ignore[union-attr]
@@ -557,7 +557,6 @@ if sys.platform.startswith("win"):
 
     def _is_same(f1: str, f2: str) -> bool:
         return Path(f1) == Path(f2) or os.path.samefile(f1, f2)
-
 
 else:
 
