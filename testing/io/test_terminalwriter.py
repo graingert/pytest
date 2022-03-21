@@ -56,7 +56,7 @@ def test_terminalwriter_not_unicode() -> None:
     file = io.TextIOWrapper(buffer, encoding="cp1252")
     tw = terminalwriter.TerminalWriter(file)
     tw.write("hello 🌀 wôrld אבג", flush=True)
-    assert buffer.getvalue() == br"hello \U0001f300 w\xf4rld \u05d0\u05d1\u05d2"
+    assert buffer.getvalue() == rb"hello \U0001f300 w\xf4rld \u05d0\u05d1\u05d2"
 
 
 win32 = int(sys.platform == "win32")
@@ -258,13 +258,22 @@ class TestTerminalWriterLineWidth:
             id="with markup and code_highlight",
         ),
         pytest.param(
-            True, False, "assert 0\n", id="with markup but no code_highlight",
+            True,
+            False,
+            "assert 0\n",
+            id="with markup but no code_highlight",
         ),
         pytest.param(
-            False, True, "assert 0\n", id="without markup but with code_highlight",
+            False,
+            True,
+            "assert 0\n",
+            id="without markup but with code_highlight",
         ),
         pytest.param(
-            False, False, "assert 0\n", id="neither markup nor code_highlight",
+            False,
+            False,
+            "assert 0\n",
+            id="neither markup nor code_highlight",
         ),
     ],
 )

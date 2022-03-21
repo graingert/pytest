@@ -99,7 +99,7 @@ class ParameterSet(
         if id is not None:
             if not isinstance(id, str):
                 raise TypeError(
-                    "Expected id to be a string, got {}: {!r}".format(type(id), id)
+                    f"Expected id to be a string, got {type(id)}: {id!r}"
                 )
             id = ascii_escaped(id)
         return cls(values, marks, id)
@@ -437,15 +437,11 @@ if TYPE_CHECKING:
             ...
 
     class _UsefixturesMarkDecorator(MarkDecorator):
-        def __call__(  # type: ignore[override]
-            self, *fixtures: str
-        ) -> MarkDecorator:
+        def __call__(self, *fixtures: str) -> MarkDecorator:  # type: ignore[override]
             ...
 
     class _FilterwarningsMarkDecorator(MarkDecorator):
-        def __call__(  # type: ignore[override]
-            self, *filters: str
-        ) -> MarkDecorator:
+        def __call__(self, *filters: str) -> MarkDecorator:  # type: ignore[override]
             ...
 
 

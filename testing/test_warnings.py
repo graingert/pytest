@@ -662,7 +662,7 @@ class TestStackLevel:
         class CapturedWarnings:
             captured: List[
                 Tuple[warnings.WarningMessage, Optional[Tuple[str, int, str]]]
-            ] = ([])
+            ] = []
 
             @classmethod
             def pytest_warning_recorded(cls, warning_message, when, nodeid, location):
@@ -772,7 +772,7 @@ class TestStackLevel:
         # with stacklevel=2 the warning should originate from the above created test file
         result.stdout.fnmatch_lines_random(
             [
-                "*{testfile}:3*".format(testfile=str(testfile)),
+                f"*{str(testfile)}:3*",
                 "*Unknown pytest.mark.unknown*",
             ]
         )

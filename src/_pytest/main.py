@@ -115,7 +115,9 @@ def pytest_addoption(parser: Parser) -> None:
         help="markers not registered in the `markers` section of the configuration file raise errors.",
     )
     group._addoption(
-        "--strict", action="store_true", help="(deprecated) alias to --strict-markers.",
+        "--strict",
+        action="store_true",
+        help="(deprecated) alias to --strict-markers.",
     )
     group._addoption(
         "-c",
@@ -290,7 +292,7 @@ def wrap_session(
             except exit.Exception as exc:
                 if exc.returncode is not None:
                     session.exitstatus = exc.returncode
-                sys.stderr.write("{}: {}\n".format(type(exc).__name__, exc))
+                sys.stderr.write(f"{type(exc).__name__}: {exc}\n")
             else:
                 if isinstance(excinfo.value, SystemExit):
                     sys.stderr.write("mainloop: caught unexpected SystemExit!\n")
@@ -307,7 +309,7 @@ def wrap_session(
             except exit.Exception as exc:
                 if exc.returncode is not None:
                     session.exitstatus = exc.returncode
-                sys.stderr.write("{}: {}\n".format(type(exc).__name__, exc))
+                sys.stderr.write(f"{type(exc).__name__}: {exc}\n")
         config._ensure_unconfigure()
     return session.exitstatus
 
@@ -655,11 +657,11 @@ class Session(nodes.FSCollector):
         node_cache1: Dict[py.path.local, Sequence[nodes.Collector]] = {}
         node_cache2: Dict[
             Tuple[Type[nodes.Collector], py.path.local], nodes.Collector
-        ] = ({})
+        ] = {}
 
         # Keep track of any collected collectors in matchnodes paths, so they
         # are not collected more than once.
-        matchnodes_cache: Dict[Tuple[Type[nodes.Collector], str], CollectReport] = ({})
+        matchnodes_cache: Dict[Tuple[Type[nodes.Collector], str], CollectReport] = {}
 
         # Dirnames of pkgs with dunder-init files.
         pkg_roots: Dict[str, Package] = {}
@@ -690,7 +692,7 @@ class Session(nodes.FSCollector):
             # If it's a directory argument, recurse and look for any Subpackages.
             # Let the Package collector deal with subnodes, don't collect here.
             if argpath.is_dir():
-                assert not names, "invalid arg {!r}".format((argpath, names))
+                assert not names, f"invalid arg {(argpath, names)!r}"
 
                 seen_dirs: Set[py.path.local] = set()
                 for direntry in visit(str(argpath), self._recurse):

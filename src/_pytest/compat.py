@@ -143,7 +143,8 @@ def getfuncargnames(
         parameters = signature(function).parameters
     except (ValueError, TypeError) as e:
         fail(
-            f"Could not determine arguments of {function!r}: {e}", pytrace=False,
+            f"Could not determine arguments of {function!r}: {e}",
+            pytrace=False,
         )
 
     arg_names = tuple(
@@ -176,7 +177,6 @@ if sys.version_info < (3, 7):
     @contextmanager
     def nullcontext():
         yield
-
 
 else:
     from contextlib import nullcontext as nullcontext  # noqa: F401
@@ -397,4 +397,4 @@ else:
 #
 # This also work for Enums (if you use `is` to compare) and Literals.
 def assert_never(value: "NoReturn") -> "NoReturn":
-    assert False, "Unhandled value: {} ({})".format(value, type(value).__name__)
+    assert False, f"Unhandled value: {value} ({type(value).__name__})"

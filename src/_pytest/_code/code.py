@@ -270,9 +270,9 @@ class TracebackEntry:
 
         Mostly for internal use.
         """
-        tbh: Union[bool, Callable[[Optional[ExceptionInfo[BaseException]]], bool]] = (
-            False
-        )
+        tbh: Union[
+            bool, Callable[[Optional[ExceptionInfo[BaseException]]], bool]
+        ] = False
         for maybe_ns_dct in (self.frame.f_locals, self.frame.f_globals):
             # in normal cases, f_locals and f_globals are dictionaries
             # however via `exec(...)` / `eval(...)` they can be other types
@@ -950,7 +950,7 @@ class TerminalRepr:
         return io.getvalue().strip()
 
     def __repr__(self) -> str:
-        return "<{} instance at {:0x}>".format(self.__class__, id(self))
+        return f"<{self.__class__} instance at {id(self):0x}>"
 
     def toterminal(self, tw: TerminalWriter) -> None:
         raise NotImplementedError()

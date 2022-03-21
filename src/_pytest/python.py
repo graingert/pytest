@@ -1187,7 +1187,9 @@ class Metafunc:
         return new_ids
 
     def _resolve_arg_value_types(
-        self, argnames: Sequence[str], indirect: Union[bool, Sequence[str]],
+        self,
+        argnames: Sequence[str],
+        indirect: Union[bool, Sequence[str]],
     ) -> Dict[str, "Literal['params', 'funcargs']"]:
         """Resolve if each parametrized argument must be considered a
         parameter to a fixture or a "funcarg" to the function, based on the
@@ -1225,7 +1227,9 @@ class Metafunc:
         return valtypes
 
     def _validate_if_using_arg_names(
-        self, argnames: Sequence[str], indirect: Union[bool, Sequence[str]],
+        self,
+        argnames: Sequence[str],
+        indirect: Union[bool, Sequence[str]],
     ) -> None:
         """Check if all argnames are being used, by default values, or directly/indirectly.
 
@@ -1396,7 +1400,7 @@ def idmaker(
         # Suffix non-unique IDs to make them unique.
         for index, test_id in enumerate(resolved_ids):
             if test_id_counts[test_id] > 1:
-                resolved_ids[index] = "{}{}".format(test_id, test_id_suffixes[test_id])
+                resolved_ids[index] = f"{test_id}{test_id_suffixes[test_id]}"
                 test_id_suffixes[test_id] += 1
 
     return resolved_ids
@@ -1445,7 +1449,7 @@ def _show_fixtures_per_test(config: Config, session: Session) -> None:
         tw.line()
         tw.sep("-", f"fixtures used by {item.name}")
         # TODO: Fix this type ignore.
-        tw.sep("-", "({})".format(get_best_relpath(item.function)))  # type: ignore[attr-defined]
+        tw.sep("-", f"({get_best_relpath(item.function)})")  # type: ignore[attr-defined]
         # dict key not used in loop but needed for sorting.
         for _, fixturedefs in sorted(info.name2fixturedefs.items()):
             assert fixturedefs is not None
@@ -1676,7 +1680,8 @@ class Function(PyobjMixin, nodes.Item):
 
     # TODO: Type ignored -- breaks Liskov Substitution.
     def repr_failure(  # type: ignore[override]
-        self, excinfo: ExceptionInfo[BaseException],
+        self,
+        excinfo: ExceptionInfo[BaseException],
     ) -> Union[str, TerminalRepr]:
         style = self.config.getoption("tbstyle", "auto")
         if style == "auto":

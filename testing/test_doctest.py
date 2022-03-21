@@ -70,7 +70,9 @@ class TestDoctests:
 
     @pytest.mark.parametrize("filename", ["__init__", "whatever"])
     def test_collect_module_two_doctest_no_modulelevel(
-        self, pytester: Pytester, filename: str,
+        self,
+        pytester: Pytester,
+        filename: str,
     ) -> None:
         path = pytester.makepyfile(
             **{
@@ -729,12 +731,11 @@ class TestDoctests:
             test_unicode_doctest="""
             .. doctest::
 
-                >>> print(
-                ...    "Hi\\n\\nByé")
+                >>> print("Hi\\n\\nByé")
                 Hi
                 ...
                 Byé
-                >>> 1/0  # Byé
+                >>> 1 / 0  # Byé
                 1
         """
         )
